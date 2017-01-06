@@ -21,7 +21,7 @@ additional classes.
 ```lua
 Point = Object:extend()
 
-function Point:new(x, y)
+function Point:init(x, y)
   self.x = x or 0
   self.y = y or 0
 end
@@ -29,15 +29,15 @@ end
 
 ### Creating a new object
 ```lua
-local p = Point(10, 20)
+local p = Point.new(10, 20)
 ```
 
 ### Extending an existing class
 ```lua
 Rect = Point:extend()
 
-function Rect:new(x, y, width, height)
-  Rect.super.new(self, x, y)
+function Rect:init(x, y, width, height)
+  self:super_call('init', x, y)
   self.width = width or 0
   self.height = height or 0
 end
@@ -45,7 +45,7 @@ end
 
 ### Checking an object's type
 ```lua
-local p = Point(10, 20)
+local p = Point.new(10, 20)
 print(p:is(Object)) -- true
 print(p:is(Point)) -- true
 print(p:is(Rect)) -- false 
@@ -65,13 +65,13 @@ end
 Point = Object:extend()
 Point:implement(PairPrinter)
 
-function Point:new(x, y)
+function Point:init(x, y)
   self.x = x or 0
   self.y = y or 0
 end
 
 
-local p = Point()
+local p = Point.new()
 p:printPairs()
 ```
 
@@ -80,7 +80,7 @@ p:printPairs()
 Point = Object:extend()
 Point.scale = 2
 
-function Point:new(x, y)
+function Point:init(x, y)
   self.x = x or 0
   self.y = y or 0
 end

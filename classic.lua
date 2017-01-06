@@ -12,7 +12,11 @@ local Object = {}
 Object.__index = Object
 
 
-function Object:new()
+function Object:init()
+end
+
+function Object:super_call(name, ...)
+  getmetatable(self).super[name](self, ...)
 end
 
 
@@ -26,6 +30,13 @@ function Object:extend()
   cls.__index = cls
   cls.super = self
   setmetatable(cls, self)
+
+  cls.new = function(...)
+    local obj = setmetatable({}, cls)
+    obj:init(...)
+    return obj
+  end
+
   return cls
 end
 
@@ -57,12 +68,5 @@ function Object:__tostring()
   return "Object"
 end
 
-
-function Object:__call(...)
-  local obj = setmetatable({}, self)
-  obj:new(...)
-  return obj
-end
-
-
 return Object
+
