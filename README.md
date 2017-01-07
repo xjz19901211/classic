@@ -61,9 +61,9 @@ function PairPrinter:printPairs()
   end
 end
 
-
 Point = Object:extend()
-Point:implement(PairPrinter)
+Point:include(PairPrinter)
+-- Point:include(class1, class2, ...)
 
 function Point:init(x, y)
   self.x = x or 0
@@ -92,8 +92,10 @@ end
 
 ### Creating a metamethod
 ```lua
+Point = Object:extend('Point')
+
 function Point:__tostring()
-  return self.x .. ", " .. self.y
+  return '<' .. self._class_name .. ' ' .. self.x .. ", " .. self.y .. '>'
 end
 ```
 

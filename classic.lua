@@ -10,25 +10,17 @@
 
 local Object = {}
 Object.__index = Object
+Object._class_name = 'Object'
 
 
-function Object:init()
-end
-
-function Object:super_call(name, ...)
-  getmetatable(self).super[name](self, ...)
-end
-
-
-function Object:extend()
+function Object:extend(name)
   local cls = {}
   for k, v in pairs(self) do
-    if k:find("__") == 1 then
-      cls[k] = v
-    end
+    if k:find("__") == 1 then cls[k] = v end
   end
+  cls._class_name = name or self._class_name
+  cls._super = self
   cls.__index = cls
-  cls.super = self
   setmetatable(cls, self)
 
   cls.new = function(...)
@@ -40,8 +32,7 @@ function Object:extend()
   return cls
 end
 
-
-function Object:implement(...)
+function Object:include(...)
   for _, cls in pairs({...}) do
     for k, v in pairs(cls) do
       if self[k] == nil and type(v) == "function" then
@@ -51,6 +42,13 @@ function Object:implement(...)
   end
 end
 
+
+function Object:init()
+end
+
+function Object:super_call(name, ...)
+  getmetatable(self)._super[name](self, ...)
+end
 
 function Object:is(T)
   local mt = getmetatable(self)
@@ -63,10 +61,11 @@ function Object:is(T)
   return false
 end
 
-
 function Object:__tostring()
-  return "Object"
+  return self._class_name
 end
+
+setmetatable(Object, {__tostring = Object.__tostring})
 
 return Object
 
