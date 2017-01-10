@@ -96,6 +96,16 @@ describe('classic', function()
       o = User:extend('Other')
       assert.is_equal(tostring(o), 'Other')
     end)
+
+    it('should return instance id', function()
+      u1 = User.new()
+      u2 = User.new()
+      assert.is_equal(tostring(u1), '<User 1>')
+      assert.is_equal(tostring(u2), '<User 2>')
+
+      o = User:extend('Other')
+      assert.is_equal(tostring(o.new()), '<Other 1>')
+    end)
   end)
 end)
 

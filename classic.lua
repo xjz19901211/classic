@@ -20,11 +20,14 @@ function Object:extend(name)
   end
   cls._class_name = name or self._class_name
   cls._super = self
+  cls._next_id = 1
   cls.__index = cls
   setmetatable(cls, self)
 
   cls.new = function(...)
     local obj = setmetatable({}, cls)
+    obj._id = cls._next_id
+    cls._next_id = cls._next_id + 1
     obj:init(...)
     return obj
   end
@@ -62,7 +65,11 @@ function Object:is(T)
 end
 
 function Object:__tostring()
-  return self._class_name
+  if self._id then
+    return '<' .. self._class_name .. ' ' .. self._id .. '>'
+  else
+    return self._class_name
+  end
 end
 
 setmetatable(Object, {__tostring = Object.__tostring})
