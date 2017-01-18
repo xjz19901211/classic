@@ -56,7 +56,7 @@ end
 function Object:is(T)
   local mt = getmetatable(self)
   while mt do
-    if mt == T then
+    if mt == T or mt._class_name == T then
       return true
     end
     mt = getmetatable(mt)
